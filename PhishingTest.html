@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🛡️ Cyber Guard Game</title>
+  <style>
+    body {
+      font-family: 'Arial Rounded MT Bold', sans-serif;
+      text-align: center;
+      background-color: #f0f8ff;
+      padding: 40px;
+    }
+    h2 {
+      color: #0a75ad;
+      font-size: 2em;
+    }
+    .message-box {
+      font-size: 1.3em;
+      background: #ffffff;
+      padding: 20px;
+      margin: 20px auto;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 12px;
+      box-shadow: 2px 2px 8px #ccc;
+    }
+    button {
+      font-size: 1.2em;
+      margin: 10px 20px;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .safe-btn { background-color: #28a745; color: white; }
+    .trap-btn { background-color: #dc3545; color: white; }
+    .next-btn { background-color: #007bff; color: white; margin-top: 20px; }
+    #feedback { font-size: 1.4em; margin-top: 20px; }
+    #score { margin-top: 30px; font-size: 1.2em; }
+  </style>
+</head>
+<body>
+
+  <h2>🛡️ Cyber Guard Game</h2>
+  <p><strong>Read the message below and decide:</strong></p>
+
+  <div class="message-box" id="messageBox"></div>
+
+  <div>
+    <button class="safe-btn" onclick="checkAnswer(true)">✅ Safe</button>
+    <button class="trap-btn" onclick="checkAnswer(false)">❌ Trap</button>
+  </div>
+
+  <div id="feedback"></div>
+
+  <div id="score">✅ 0 correct | ❌ 0 incorrect</div>
+
+  <button class="next-btn" style="display:none;" onclick="nextMessage()">🔄 Next Question</button>
+
+  <script>
+    const messages = [
+      { text: "Your account has been locked. Click here to unlock it.", is_safe: false, reason: "This tries to scare you into clicking a fake link. It's phishing!" },
+      { text: "Your teacher sent you a homework link via Google Classroom.", is_safe: true, reason: "You recognize your teacher and platform. This is likely safe." },
+      { text: "You've won a free iPad! Just enter your password here.", is_safe: false, reason: "Free prizes that ask for personal info are usually scams." },
+      { text: "Your friend shared a photo with you on your school drive.", is_safe: true, reason: "You know your friend and the tool is familiar." },
+      { text: "Click here to get a mystery box! Limited time only!", is_safe: false, reason: "Messages that rush you into clicking are often traps." },
+      { text: "The library says your book is due. Please return it tomorrow.", is_safe: true, reason: "This is a normal reminder with no links or strange info." },
+      { text: "Win a free puppy! Just click this link now!", is_safe: false, reason: "Phishing often uses exciting offers to trick you." },
+      { text: "Your game friend sent you a sticker pack on the app.", is_safe: true, reason: "If it’s someone you know and a safe app, it’s okay." },
+      { text: "We need your username and password to keep your account safe.", is_safe: false, reason: "No real service asks for your password like this!" },
+      { text: "Your mom sent you a photo through your family group chat.", is_safe: true, reason: "You know who sent it and it’s on a trusted platform." },
+      { text: "Claim your $100 reward by logging in here!", is_safe: false, reason: "Money offers asking for logins are big red flags." },
+      { text: "Your principal sent a message on the school website.", is_safe: true, reason: "You know the sender and the platform is safe." },
+      { text: "Click this link to see who is talking about you!", is_safe: false, reason: "Scare tactics and curiosity traps are classic phishing tricks." },
+      { text: "Your coach updated the practice time on TeamSnap.", is_safe: true, reason: "Trusted sender and tool for your team." },
+      { text: "You have a virus! Click here to fix it now!", is_safe: false, reason: "Fake virus warnings are common scam tricks." },
+      { text: "Your library eBook is ready to download.", is_safe: true, reason: "This is a real notification from a known service." },
+      { text: "Click here to watch a video of you someone posted!", is_safe: false, reason: "This is a trick to get you to click something harmful." },
+      { text: "Your teacher added a new assignment to the class portal.", is_safe: true, reason: "You know the sender and the platform is trusted." },
+      { text: "You were caught on camera doing something bad. Click here.", is_safe: false, reason: "Scam messages use fear to trick you. Don't click!" },
+      { text: "Your music playlist has a new song from your favorite artist.", is_safe: true, reason: "Trusted service, no personal info asked. It’s okay." }
+    ];
+
+    let currentMessage = {};
+    let correct = 0;
+    let incorrect = 0;
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function nextMessage() {
+      shuffle(messages);
+      currentMessage = messages[0];
+      document.getElementById("messageBox").textContent = `"${currentMessage.text}"`;
+      document.getElementById("feedback").textContent = '';
+      document.querySelector(".next-btn").style.display = 'none';
+    }
+
+    function checkAnswer(userSaysSafe) {
+      const correctAnswer = currentMessage.is_safe;
+      const feedback = document.getElementById("feedback");
+      const nextBtn = document.querySelector(".next-btn");
+
+      if (userSaysSafe === correctAnswer) {
+        correct++;
+        feedback.innerHTML = "✅ You got it right!<br><em>" + currentMessage.reason + "</em>";
+      } else {
+        incorrect++;
+        feedback.innerHTML = "❌ Oops! Not quite.<br><em>" + currentMessage.reason + "</em>";
+      }
+
+      document.getElementById("score").textContent = `✅ ${correct} correct | ❌ ${incorrect} incorrect`;
+      nextBtn.style.display = 'inline-block';
+    }
+
+    nextMessage(); // Start with the first message
+  </script>
+</body>
+</html>
